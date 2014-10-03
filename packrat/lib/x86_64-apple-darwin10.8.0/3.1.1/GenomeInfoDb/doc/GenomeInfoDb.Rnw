@@ -1,0 +1,195 @@
+%\VignetteIndexEntry{GenomeInfoDb :Introduction to GenomeInfoDb}
+%\VignetteDepends{}
+%\VignetteKeywords{organism, GenomeInfoDb}
+%\VignettePackage{GenomeInfoDb}
+%\VignetteEngine{knitr::knitr}
+\documentclass{article}
+
+<<style, eval=TRUE, echo=FALSE, results="asis">>=
+BiocStyle::latex()
+@
+
+\title{An Introduction to \Biocpkg{GenomeInfoDb}}
+\author{Martin Morgan, Herve Pages, Marc Carlson, Sonali Arora}
+\date{Modified: 17 January, 2014. Compiled: \today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+<<preliminaries, echo=FALSE, message=FALSE>>=
+library(GenomeInfoDb)
+library(TxDb.Dmelanogaster.UCSC.dm3.ensGene)
+@ 
+
+\section{Introduction}
+
+The \Biocpkg{GenomeInfoDb} provides an interface to access seqlevelsStyles 
+(such as UCSC, NCBI, Ensembl) and their supported mappings for organisms. 
+For instance, for Homo sapiens, seqlevelsStyle "UCSC" maps to "chr1", "chr2", 
+..., "chrX","chrY". The section below introduces these functions with examples.
+
+\section{Functionality for all exsiting organisms}
+ 
+
+\subsection{genomeStyles}      
+The \Rfunction{genomeStyles} lists out for each organism, the 
+seqlevelsStyles and their mappings.
+<<genomeStyles1>>=
+seqmap <- genomeStyles()
+head(seqmap,n=2)
+@ 
+%% 
+
+Oragnism's supported by GenomeInfoDb can be found by :
+<<name>>=
+names(genomeStyles())
+@
+
+If one knows the organism one is interested in, then we can directly access 
+the information for the given organism along. Each function accepts an 
+argument called species which as "genus species", the default 
+is "Homo sapiens". In the following example we list out only the first five 
+entries returned by the code snippet.
+
+
+<<genomeStyles2>>=
+head(genomeStyles("Homo_sapiens"),5)
+@ 
+%% 
+
+We can also check if a given style is supported by GenomeInfoDb for a given
+species. For example, if we want to know if "UCSC" mapping is supported for 
+"Homo sapiens" we can ask :
+
+<<style-present>>=
+"UCSC" %in% names(genomeStyles("Homo_sapiens"))
+@
+
+\subsection{extractSeqlevels}
+We can also extract the desired seqlevelsStyle from a given organism using
+the \Rfunction{extractSeqlevels}
+<<extractSeqlevels>>=
+extractSeqlevels(species="Arabidopsis_thaliana", style="NCBI")
+@ 
+%%
+
+\subsection{extractSeqlevelsByGroup}
+We can also extract the desired seqlevelsStyle from a given organism based on 
+a group ( Group - 'auto' denotes autosomes, 'circular' denotes circular
+chromosomes and 'sex' denotes sex chromosomes; the default is all chromosomes
+are returned).
+<<extractSeqlevelsgroup>>=
+extractSeqlevelsByGroup(species="Arabidopsis_thaliana", style="NCBI",
+                         group="auto")
+@ 
+%%
+
+\subsection{seqlevelsStyle}
+We can find the seqname Style for a given character vector by using the 
+\Rfunction{seqlevelsStyle}
+<<seqlevelsStyle>>=
+seqlevelsStyle(paste0("chr",c(1:30)))
+seqlevelsStyle(c("2L","2R","X","Xhet"))
+@
+%%
+
+\subsection{seqlevelsInGroup}
+We can also subset a given character vector containing seqnames  using the
+\Rfunction{seqlevelsInGroup}.
+We currently support 3 groups: 'auto' for autosomes, 'sex' for allosomes/sex 
+chromosomes and circular for 'circular' chromosomes.
+The user can also prvoide the style and species they are working with.
+In the following examples, we extract the sex, auto and circular chromosomes 
+for Homo sapiens :
+
+<<keepChr-txdb>>=
+newchr <- paste0("chr",c(1:22,"X","Y","M","1_gl000192_random","4_ctg9_hap1"))
+seqlevelsInGroup(newchr, group="sex")
+seqlevelsInGroup(newchr, group="auto")
+seqlevelsInGroup(newchr, group="circular")
+seqlevelsInGroup(newchr, group="sex","Homo_sapiens","UCSC")
+@
+%%
+
+if we have a vector conatining seqnames and we want to verify the
+species and style for them , we can use:
+<<check2>>=
+seqnames <- c("chr1", "chr9", "chr2", "chr3", "chr10")
+all(seqnames %in% extractSeqlevels("Homo_sapiens", "UCSC"))
+@
+
+\subsection{orderSeqlevels}
+The \Rfunction{orderSeqlevels} can return the order of a given character vector 
+which contains seqnames.In the following example, we show how you can find the 
+order for a given seqnames character vector.
+<<orderSeqlevels>>=
+seqnames <- c("chr1","chr9", "chr2", "chr3", "chr10")
+orderSeqlevels(seqnames)
+@
+%%
+
+\subsection{rankSeqlevels}
+The \Rfunction{rankSeqlevels} can return the rank of a given character vector 
+which contains seqnames.In the following example, we show how you can find the 
+rank for a given seqnames character vector.
+<<rankSeqlevels>>=
+seqnames <- c("chr1","chr9", "chr2", "chr3", "chr10")
+rankSeqlevels(seqnames)
+@
+%%
+
+\subsection{mapSeqlevels}
+Returns a matrix with 1 column per supplied sequence name and 1 row per 
+sequence renaming map compatible with the specified style.  If \Rcode{best.only}
+is \Rcode{TRUE} (the default), only the "best" renaming maps (i.e. the rows with
+less NAs) are returned.
+<<find>>=
+mapSeqlevels(c("chrII", "chrIII", "chrM"), "NCBI")
+@ 
+%%
+
+\section{Examples}
+
+\subsection{converting seqlevel styles (eg:UCSC to NCBI)}
+
+A quick example using Drosophila Melanogaster. The txdb object contains 
+seqlevels in UCSC style, we want to convert them to NCBI 
+
+<<quick-style>>=
+txdb <- TxDb.Dmelanogaster.UCSC.dm3.ensGene
+seqlevels(txdb)
+genomeStyles("Drosophila melanogaster")
+mapSeqlevels(seqlevels(txdb), "NCBI")
+@
+
+\subsection{converting styles and removing unwanted seqlevels}
+
+Suppose we read in a Bam file or a BED file and the resulting GRanges have a lot
+of seqlevels which are not required by your analysis or you want to rename
+the seqlevels from the current style to your own style (eg:USCS to NCBI), we can 
+use the functionality provided by GenomeInfoDb to do that.
+
+Let us say that we have extracted the seqlevels of the Seqinfo object(say 
+GRanges from a BED file) in a variable called "sequence". 
+<<sequence, eval=FALSE>>=
+sequence <- seqlevels(x) 
+
+## sequence is in UCSC format and we want NCBI style
+newStyle <- mapSeqlevels(sequence,"NCBI")
+newStyle <- newStyle[complete.cases(newStyle)] # removing NA cases.
+
+## rename the seqlevels 
+x <- renameSeqlevels(x,newStyle)
+
+## keep only the seqlevels you want (say autosomes)
+auto <- extractSeqlevelsByGroup(species="Homo sapiens", style="NCBI", 
+                                group="auto")
+x <- keepSeqlevels(x,auto)
+@
+
+
+
+\end{document}

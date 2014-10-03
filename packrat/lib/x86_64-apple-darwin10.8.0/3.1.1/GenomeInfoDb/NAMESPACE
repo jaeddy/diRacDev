@@ -1,0 +1,14 @@
+export(
+    fetchExtendedChromInfoFromUCSC,
+
+    genomeStyles,
+    
+    orderSeqlevels,
+    rankSeqlevels,
+    
+    extractSeqlevels,
+    extractSeqlevelsByGroup,
+    mapSeqlevels,
+    seqlevelsInGroup,
+    seqlevelsStyle, "seqlevelsStyle<-"
+)
