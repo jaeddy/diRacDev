@@ -22,6 +22,6 @@ Collate: assembly-utils.R fetchExtendedChromInfoFromUCSC.R seqlevels.R
 VignetteBuilder: knitr
 Packaged: 2014-04-15 05:57:22 UTC; biocbuild
 Built: R 3.1.0; ; 2014-04-15 10:57:04 UTC; unix
-InstallAgent: packrat 0.3.0.103
+InstallAgent: packrat 0.4.1.1
 InstallSource: Bioconductor
 Hash: ee5a1f4fe5e3caa08293c78be19b35ca

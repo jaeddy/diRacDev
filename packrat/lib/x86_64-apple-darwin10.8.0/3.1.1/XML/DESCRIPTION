@@ -42,6 +42,6 @@ Date/Publication: 2013-06-20 15:50:33
 Built: R 3.1.0; x86_64-apple-darwin10.8.0; 2013-10-24 14:33:10 UTC;
     unix
 Archs: XML.so.dSYM
-InstallAgent: packrat 0.3.0.103
+InstallAgent: packrat 0.4.1.1
 InstallSource: CRAN
 Hash: 13746d37588e7083349177d6e8234864

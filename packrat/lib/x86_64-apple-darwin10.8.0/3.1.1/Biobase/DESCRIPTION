@@ -23,6 +23,6 @@ biocViews: Infrastructure
 Packaged: 2014-04-12 04:44:31 UTC; biocbuild
 Built: R 3.1.0; x86_64-apple-darwin10.8.0; 2014-04-12 11:21:53 UTC;
     unix
-InstallAgent: packrat 0.3.0.103
+InstallAgent: packrat 0.4.1.1
 InstallSource: Bioconductor
 Hash: 4f0274593caa26e59ae18db561d62908

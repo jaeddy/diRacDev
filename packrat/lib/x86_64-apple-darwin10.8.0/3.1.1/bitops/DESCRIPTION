@@ -15,6 +15,6 @@ Date/Publication: 2013-08-17 21:10:34
 Built: R 3.1.0; x86_64-apple-darwin10.8.0; 2013-10-24 14:32:53 UTC;
     unix
 Archs: bitops.so.dSYM
-InstallAgent: packrat 0.3.0.103
+InstallAgent: packrat 0.4.1.1
 InstallSource: CRAN
 Hash: cb26464a8321628636b547518994c931

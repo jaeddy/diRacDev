@@ -44,6 +44,6 @@ Date/Publication: 2014-07-29 11:53:00
 Built: R 3.1.1; x86_64-apple-darwin10.8.0; 2014-07-30 09:25:55 UTC;
     unix
 Archs: RCurl.so.dSYM
-InstallAgent: packrat 0.3.0.103
+InstallAgent: packrat 0.4.1.1
 InstallSource: CRAN
 Hash: 158377109f939084a72f240125f821d3

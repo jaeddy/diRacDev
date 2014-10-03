@@ -20,6 +20,6 @@ Date/Publication: 2013-05-26 08:32:47
 Built: R 3.1.0; x86_64-apple-darwin10.8.0; 2013-10-24 17:06:24 UTC;
     unix
 Archs: RSQLite.so.dSYM
-InstallAgent: packrat 0.3.0.103
+InstallAgent: packrat 0.4.1.1
 InstallSource: CRAN
 Hash: ec89370302e0078555a54c57b61373e2

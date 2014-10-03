@@ -21,6 +21,6 @@ Collate: utilities.R AAA.R AllClasses.R AllGenerics.R getObjects.R
 biocViews: Infrastructure
 Packaged: 2014-04-12 05:01:01 UTC; biocbuild
 Built: R 3.1.0; ; 2014-04-12 11:29:39 UTC; unix
-InstallAgent: packrat 0.3.0.103
+InstallAgent: packrat 0.4.1.1
 InstallSource: Bioconductor
 Hash: 8075918bc9ca9fa849f7cea56c6f0083

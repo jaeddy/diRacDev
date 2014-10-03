@@ -47,6 +47,6 @@ Collate: S4-utils.R utils.R isConstant.R normarg-utils.R
 Packaged: 2014-07-29 01:18:07 UTC; biocbuild
 Built: R 3.1.1; x86_64-apple-darwin10.8.0; 2014-07-29 08:02:08 UTC;
     unix
-InstallAgent: packrat 0.3.0.103
+InstallAgent: packrat 0.4.1.1
 InstallSource: Bioconductor
 Hash: fe4a7edc04d7d9305c9f414fb790aad7
