@@ -23,6 +23,6 @@ Packaged: 2014-04-12 04:44:33 UTC; biocbuild
 biocViews: GraphAndNetwork
 Built: R 3.1.0; x86_64-apple-darwin10.8.0; 2014-04-12 11:29:27 UTC;
     unix
-InstallAgent: packrat 0.3.0.103
+InstallAgent: packrat 0.4.1.1
 InstallSource: Bioconductor
 Hash: 93ec3415b9a554c327948ba70eccc00f

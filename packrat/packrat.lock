@@ -1,5 +1,5 @@
 PackratFormat: 1.4
-PackratVersion: 0.3.0.103
+PackratVersion: 0.4.1.1
 RVersion: 3.1.1
 Repos: CRAN=http://cran.rstudio.com,
     BioCsoft=http://bioconductor.org/packages/2.14/bioc,
@@ -80,6 +80,11 @@ Source: Bioconductor
 Version: 1.26.0
 Hash: 8075918bc9ca9fa849f7cea56c6f0083
 Requires: annotate, AnnotationDbi, Biobase, BiocGenerics, graph, XML
+
+Package: hgu95av2
+Source: Bioconductor
+Version: 2.2.0
+Hash: f9c19e6d6577e33486f7d83f90c56a4e
 
 Package: IRanges
 Source: Bioconductor

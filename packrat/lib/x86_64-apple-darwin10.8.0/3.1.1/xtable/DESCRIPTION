@@ -13,6 +13,6 @@ Packaged: 2014-09-11 22:38:16 UTC; dsco036
 NeedsCompilation: no
 Date/Publication: 2014-09-12 14:30:04
 Built: R 3.1.1; ; 2014-09-22 21:32:33 UTC; unix
-InstallAgent: packrat 0.3.0.103
+InstallAgent: packrat 0.4.1.1
 InstallSource: CRAN
 Hash: 7b30b5ca6c7ae80c4f916502e3ad0237

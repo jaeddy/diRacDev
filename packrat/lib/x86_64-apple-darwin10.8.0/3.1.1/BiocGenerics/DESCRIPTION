@@ -22,6 +22,6 @@ Collate: S3-classes-as-S4-classes.R append.R as.data.frame.R
     zzz.R
 Packaged: 2014-04-12 05:44:07 UTC; biocbuild
 Built: R 3.1.0; ; 2014-04-12 11:21:57 UTC; unix
-InstallAgent: packrat 0.3.0.103
+InstallAgent: packrat 0.4.1.1
 InstallSource: Bioconductor
 Hash: b6c70fc618424d8147d06f1b97858ceb

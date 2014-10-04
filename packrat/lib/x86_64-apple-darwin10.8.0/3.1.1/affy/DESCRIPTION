@@ -37,6 +37,6 @@ LazyLoad: yes
 Packaged: 2014-06-20 01:48:23 UTC; biocbuild
 Built: R 3.1.0; x86_64-apple-darwin10.8.0; 2014-06-20 08:18:00 UTC;
     unix
-InstallAgent: packrat 0.3.0.103
+InstallAgent: packrat 0.4.1.1
 InstallSource: Bioconductor
 Hash: dbe49632d6ff86a2d81aefe8d1f66f4e

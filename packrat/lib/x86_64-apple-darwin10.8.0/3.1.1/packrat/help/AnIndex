@@ -11,6 +11,7 @@ install_local	install_local
 migrate	migrate
 off	packrat-mode
 on	packrat-mode
+opts	packrat-options
 packify	packify
 packrat	packrat
 packrat-external	packrat-external

@@ -34,6 +34,6 @@ biocViews: Annotation, Infrastructure
 VignetteBuilder: knitr
 Packaged: 2014-10-02 01:59:52 UTC; biocbuild
 Built: R 3.1.1; ; 2014-10-02 08:32:02 UTC; unix
-InstallAgent: packrat 0.3.0.103
+InstallAgent: packrat 0.4.1.1
 InstallSource: Bioconductor
 Hash: 53c9eaa06d2cf6c4730c0acfe117b224
