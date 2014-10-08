@@ -27,30 +27,37 @@ fData(sample.ExpressionSet) <- featureData(sample.ExpressionSet) %>%
     as.data.frame() %>%
     select(symbol = starts_with("featureData"))
 
-f <- fData(sample.ExpressionSet)
-
-allGenes <- unique(as.character(unlist(geneIds(bcgsc))))
-bcGenes <- geneSymbols[geneSymbols %in% allGenes]
-
-map_expression_to_set <- function(gs, es) {
-    mapIdx <- geneIds(gs) %in% fData(es)$symbol
-}
-
-for (gs in bcgsc) {
-    if (sum(geneIds(gs) %in% geneSymbols) > 1) {
-        print(gs)
+for (i in 1:length(bcgsc)) {
+    gs <- bcgsc[i]
+    if (sum(geneIds(gs) %in% f) > 1) {
+        print(i)
     }
 }
 
-
+f <- fData(sample.ExpressionSet)
 gs <- bcgsc[["BIOCARTA_GLYCOLYSIS_PATHWAY"]]
-geneIds(gs) %in% geneSymbols
-sum(geneSymbols %in% geneIds(gs))
-mapIdx <- geneSymbols %in% geneIds(gs)
 
-test <- data.frame(gene = geneSymbols[mapIdx], 
-                   exprs(sample.ExpressionSet[mapIdx]))
+mapIdx <- f$symbol %in% geneIds(gs)
+sum(mapIdx)
 
-test2 <- test %>%
-    group_by(gene) %>%
-    summarise_each(funs(max))
+map_eset_to_geneset <- function(gs, es) {
+    map_idx <- fData(es)$symbol %in% geneIds(gs)
+    df <- data.frame(gene = fData(es)$symbol[map_idx],
+                     exprs(es[map_idx])) %>%
+        group_by(gene) %>%
+        summarise_each(funs(max))
+    df
+}
+
+test <- map_eset_to_geneset(gs, sample.ExpressionSet)
+test_list <- lapply(bcgsc, FUN = function(x) map_eset_to_geneset(x, sample.ExpressionSet))
+
+gsc_to_df <- function(gsc) {
+    df <- data.frame()
+    for (gs in gsc) {
+        df <- rbind(df, data.frame(gs = setName(gs), genes = geneIds(gs)))
+    }
+    df
+}
+
+gsc_df <- gsc_to_df(bcgsc)
