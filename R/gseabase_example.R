@@ -3,6 +3,7 @@ library(GEOquery)
 library(GSEABase)
 library(hgu95av2)
 library(dplyr)
+library(reshape2)
 
 # Expression data for 500 features and 26 samples
 data(sample.ExpressionSet)
