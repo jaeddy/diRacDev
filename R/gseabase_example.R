@@ -40,7 +40,7 @@ gs <- bcgsc[["BIOCARTA_GLYCOLYSIS_PATHWAY"]]
 
 mapIdx <- f$symbol %in% geneIds(gs)
 sum(mapIdx)
-
+# probably replacing this with data frame functions
 map_eset_to_geneset <- function(gs, es) {
     map_idx <- fData(es)$symbol %in% geneIds(gs)
     df <- data.frame(gene = fData(es)$symbol[map_idx],
@@ -51,8 +51,8 @@ map_eset_to_geneset <- function(gs, es) {
 }
 
 test <- map_eset_to_geneset(gs, sample.ExpressionSet)
-test_list <- lapply(bcgsc, FUN = function(x) map_eset_to_geneset(x, sample.ExpressionSet))
 
+# function to convert gene set collection to data frame
 gsc_to_df <- function(gsc) {
     df <- data.frame()
     for (gs in gsc) {
@@ -62,3 +62,25 @@ gsc_to_df <- function(gsc) {
 }
 
 gsc_df <- gsc_to_df(bcgsc)
+
+# convert expression set to data frame
+es_df <- as.data.frame(sample.ExpressionSet)
+names(es_df) <- gsub("^X", "", names(es_df))
+es_df$sample <- row.names(es_df)
+
+# use melt to put data in 'long' form
+es_melt <- es_df %>%
+    melt(id.vars = c("sex", "type", "score", "sample"),
+         variable.name = "probe", value.name = "expression")
+
+# function to convert probe IDs to gene symbols
+get_symbol <- function(x, data) {
+    x <- as.character(x)
+    getSYMBOL(x, data)
+}
+
+# get max expression across probes for each sample and gene
+test <- es_melt %>%
+    mutate(gene = get_symbol(probe, "hgu95av2")) %>%
+    group_by(sample, gene, sex, type, score) %>%
+    summarise(expression = max(expression))
