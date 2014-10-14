@@ -1,6 +1,0 @@
-GenomeInfoDb-helpers    List the supported seqname styles for all
-                        supported organisms
-fetchExtendedChromInfoFromUCSC
-                        Fetching chromosomes info for some of the UCSC
-                        genomes
-rankSeqlevels           Assign sequence IDs to sequence names
