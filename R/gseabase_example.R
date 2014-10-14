@@ -14,7 +14,7 @@ exprs <- sample.ExpressionSet[201:250, ]
 # Create gene set collection
 biocartaFile <- "c2.cp.biocarta.v4.0.symbols.gmt"
 # fileAddress <- paste0("http://www.broadinstitute.org/gsea/msigdb/download_file",
-                      ".jsp?filePath=/resources/msigdb/4.0/", biocartaFile)
+#                      ".jsp?filePath=/resources/msigdb/4.0/", biocartaFile)
 # download.file(fileAddress, paste0("data/", biocartaFile), method = "curl")
 
 bcgsc <- getGmt(paste0("data/", biocartaFile),
@@ -38,19 +38,6 @@ for (i in 1:length(bcgsc)) {
 f <- fData(sample.ExpressionSet)
 gs <- bcgsc[["BIOCARTA_GLYCOLYSIS_PATHWAY"]]
 
-mapIdx <- f$symbol %in% geneIds(gs)
-sum(mapIdx)
-# probably replacing this with data frame functions
-map_eset_to_geneset <- function(gs, es) {
-    map_idx <- fData(es)$symbol %in% geneIds(gs)
-    df <- data.frame(gene = fData(es)$symbol[map_idx],
-                     exprs(es[map_idx])) %>%
-        group_by(gene) %>%
-        summarise_each(funs(max))
-    df
-}
-
-test <- map_eset_to_geneset(gs, sample.ExpressionSet)
 
 # function to convert gene set collection to data frame
 gsc_to_df <- function(gsc) {
@@ -80,7 +67,41 @@ get_symbol <- function(x, data) {
 }
 
 # get max expression across probes for each sample and gene
-test <- es_melt %>%
+gene_df <- es_melt %>%
     mutate(gene = get_symbol(probe, "hgu95av2")) %>%
-    group_by(sample, gene, sex, type, score) %>%
-    summarise(expression = max(expression))
+    group_by(sample, sex, type, score, gene) %>%
+    summarise(expression = max(expression)) %>%
+    as.data.frame()
+
+# gene set for testing
+gs <- gsc_df %>%
+    filter(gs == "BIOCARTA_GLYCOLYSIS_PATHWAY")
+gs
+
+# function to count genes mapped to each gene set (for testing)
+count_mapped_genes <- function(gs, gene_df) {
+    gs_df <- gene_df %>%
+        filter(gene %in% gs$genes) %>%
+        select(gene) %>%
+        distinct()
+    nrow(gs_df)
+}
+
+count_mapped_genes(gs, gene_df)
+
+# function to map gene expression values to an individual gene set
+map_gene_to_gs <- function(gs, gene_df) {
+    gene_df %>%
+        filter(gene %in% gs$genes) %>%
+        select(gene) %>%
+        dist
+}
+
+map_gene_to_gs(gs, gene_df)
+
+
+# trying with join instead...
+gs_df <- gs %>%
+    left_join(gene_df, c("genes", "gene"))
+
+
