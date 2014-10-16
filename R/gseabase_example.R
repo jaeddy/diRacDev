@@ -74,8 +74,17 @@ gene_df <- es_melt %>%
     as.data.frame()
 
 # gene set for testing
+for (bcgs in bcgsc) {
+    gs_name <- setName(bcgs)
+    gs <- gsc_df %>%
+        filter(gs == gs_name)
+    if (sum(gs$genes %in% gene_df$gene) > 2) {
+        print(gs_name)
+        print(sum(gs$genes %in% gene_df$gene))
+    }
+}
 gs <- gsc_df %>%
-    filter(gs == "BIOCARTA_GLYCOLYSIS_PATHWAY")
+    filter(gs == "BIOCARTA_TEL_PATHWAY")
 gs
 
 # function to count genes mapped to each gene set (for testing)
@@ -92,16 +101,18 @@ count_mapped_genes(gs, gene_df)
 # function to map gene expression values to an individual gene set
 map_gene_to_gs <- function(gs, gene_df) {
     gene_df %>%
-        filter(gene %in% gs$genes) %>%
-        select(gene) %>%
-        dist
+        filter(gene %in% gs$genes)
 }
 
-map_gene_to_gs(gs, gene_df)
+gs_df <- map_gene_to_gs(gs, gene_df) # this could potentially be done with a join...
 
 
-# trying with join instead...
-gs_df <- gs %>%
-    left_join(gene_df, c("genes", "gene"))
+gs_mat <- gs_df %>%
+    acast(gene ~ sample)
+
+gs_ranks <- gs_mat %>%
+    apply(2, rank)
+
+gs_kt <- cor(gs_ranks, method = "kendall")
 
 
