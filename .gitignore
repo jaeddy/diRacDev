@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+.Rprofile
 .Rproj.user
 .Rhistory
 .RData
@@ -6,5 +6,4 @@ packrat/lib*/
 data*
 =======
 .Rproj*
->>>>>>> a26c92e3306cb55aca4f989abeb28b209846232e
->>>>>>> b9ac84f46928c2accee71eefc597608cdcaa1fad
+
