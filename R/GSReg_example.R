@@ -1,5 +1,6 @@
-#library(GSBenchMark)
-#library(GSReg)
+library(GSBenchMark)
+library(GSReg)
+library(dplyr)
 
 data(diracpathways)
 data(GSBenchMarkDatasets)
@@ -26,71 +27,30 @@ dysregulatedPathways <- rbind(diracResult$mu1[sigPathways],
 rownames(dysregulatedPathways) <- c("mu1", "mu2", "pvalues");
 print(dysregulatedPathways[,1:5])
 
+# convert results matrix to data frame
+topPathways <- data.frame(t(dysregulatedPathways))
+topPathways <- cbind(pathway = row.names(topPathways), topPathways)
 
+gs <- as.character(topPathways$pathway[1])
 
-# function to convert gene set collection to data frame
-gsc_to_df <- function(gsc) {
-    df <- data.frame()
-    for (gs in gsc) {
-        df <- rbind(df, data.frame(gs = setName(gs), genes = geneIds(gs)))
-    }
-    df
-}
+length(diracpathways[[gs]])
+sum(row.names(exprsdata) %in% diracpathways[[gs]])
 
-gsc_df <- gsc_to_df(bcgsc)
+test <- exprsdata %>%
+    data.frame() %>%
+    mutate(gene = as.factor(row.names(exprsdata))) %>%
+    filter(gene %in% diracpathways[[gs]]) %>%
+    group_by(gene) %>%
+    summarise_each_(funs(max), list(quote(-gene)))
 
-# convert expression set to data frame
-es_df <- as.data.frame(sample.ExpressionSet)
-names(es_df) <- gsub("^X", "", names(es_df))
-es_df$sample <- row.names(es_df)
-
-# use melt to put data in 'long' form
-es_melt <- es_df %>%
-    melt(id.vars = c("sex", "type", "score", "sample"),
-         variable.name = "probe", value.name = "expression")
-
-# function to convert probe IDs to gene symbols
-get_symbol <- function(x, data) {
-    x <- as.character(x)
-    getSYMBOL(x, data)
-}
-
-# get max expression across probes for each sample and gene
-gene_df <- es_melt %>%
-    mutate(gene = get_symbol(probe, "hgu95av2")) %>%
-    group_by(sample, sex, type, score, gene) %>%
-    summarise(expression = max(expression)) %>%
-    as.data.frame()
-
-# gene set for testing
-for (bcgs in bcgsc) {
-    gs_name <- setName(bcgs)
-    gs <- gsc_df %>%
-        filter(gs == gs_name)
-    if (sum(gs$genes %in% gene_df$gene) > 2) {
-        print(gs_name)
-        print(sum(gs$genes %in% gene_df$gene))
-    }
-}
-gs <- gsc_df %>%
-    filter(gs == "BIOCARTA_TEL_PATHWAY")
-gs
-
-# function to count genes mapped to each gene set (for testing)
-count_mapped_genes <- function(gs, gene_df) {
-    gs_df <- gene_df %>%
-        filter(gene %in% gs$genes) %>%
-        select(gene) %>%
-        distinct()
-    nrow(gs_df)
-}
-
-count_mapped_genes(gs, gene_df)
+test2 <- test
+names(test) <- as.character(phenotypes)
 
 # function to map gene expression values to an individual gene set
 map_gene_to_gs <- function(gs, gene_df) {
-    gene_df %>%
+    gene_mat %>%
+        mutate
         filter(gene %in% gs$genes)
 }
 
-gs_df <- map_gene_to_gs(gs, gene_df)
+
