@@ -33,24 +33,29 @@ topPathways <- cbind(pathway = row.names(topPathways), topPathways)
 
 gs <- as.character(topPathways$pathway[1])
 
-length(diracpathways[[gs]])
-sum(row.names(exprsdata) %in% diracpathways[[gs]])
-
-test <- exprsdata %>%
-    data.frame() %>%
-    mutate(gene = as.factor(row.names(exprsdata))) %>%
-    filter(gene %in% diracpathways[[gs]]) %>%
-    group_by(gene) %>%
-    summarise_each_(funs(max), list(quote(-gene)))
-
-test2 <- test
-names(test) <- as.character(phenotypes)
-
 # function to map gene expression values to an individual gene set
-map_gene_to_gs <- function(gs, gene_df) {
+map_gene_to_gs <- function(gs, gene_mat) {
     gene_mat %>%
-        mutate
-        filter(gene %in% gs$genes)
+        data.frame() %>%
+        mutate(gene = as.factor(row.names(exprsdata))) %>%
+        filter(gene %in% diracpathways[[gs]]) %>%
+        group_by(gene) %>%
+        summarise_each_(funs(max), list(quote(-gene)))
 }
 
+gs_df <- map_gene_to_gs(gs, exprsdata)
 
+label_samples <- function(gs_df, phenotypes) {
+    classes <- as.numeric(phenotypes)
+    labels <- paste0(classes, 
+                     rep("_", length(classes)),
+                     as.character(c(1:sum(classes == 1), 
+                                    1:sum(classes == 2))))
+    labels <- c("gene", labels)
+    names(gs_df) <- labels    
+    row.names(gs_df) <- gs_df$gene
+    gs_df %>%
+        select(-gene)
+}
+
+gs_df <- label_samples(gs_df, phenotypes)
